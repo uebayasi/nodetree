@@ -65,7 +65,7 @@ buildTree :: (Show a) => NodeCompare a -> [(Key, a)] -> NodePair a
 buildTree cmp [] = undefined
 buildTree cmp vs =
     let (x:xs) = map (second rootNode_) vs
-#ifdef COMPOSE_DEBUG
+#ifdef NODETREE_DEBUG
                 & trace ("buildTree: " ++ ppShow vs)
 #endif
     in foldl (flip (insertRoot cmp)) x xs
@@ -88,7 +88,7 @@ insertRoot cmp (newidx, newnode) (idx, node) =
 insertNode :: (Show a) => NodeCompare a -> NodePair a -> NodePair a -> (NodePair a, Ordering)
 insertNode cmp (newidx, newnode) (idx, node) =
     let c = cmp (node ^. nodeValue) (newnode ^. nodeValue)
-#ifdef COMPOSE_DEBUG
+#ifdef NODETREE_DEBUG
                 & trace ("children: " ++ show (node ^. nodeChildren))
 #endif
     in case c of
@@ -150,7 +150,7 @@ updateChildren cmp idx (newidx, newnode) cs =
                 _ ->
                     undefined
     in subtree
-#ifdef COMPOSE_DEBUG
+#ifdef NODETREE_DEBUG
             & trace ("newnode: " ++ show newnode)
             & trace ("inluding: " ++ show (ni ^. niIncluding))
             & trace ("exluding: " ++ show (ni ^. niExcluding))
